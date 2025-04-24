@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Agendamento de Paciente - CEDROC</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <div style="text-align:center;">
+    <img src="Logotipo_CEDROC_PNG - Portable Network Graphics.png" alt="Logo CEDROC" width="200">
+    <h2>CEDROC - Centro de Radiologia</h2>
+    <p>Telefone: (65) 98402-5987</p>
+  </div>
+
+  <hr>
+
+  <h3>Formulário de Agendamento</h3>
+  <form id="agendamentoForm">
+    <label>Nome do Paciente:<br><input type="text" id="nomePaciente" required></label><br><br>
+    <label>Data de Nascimento:<br><input type="date" id="nascimentoPaciente" required></label><br><br>
+    <label>Telefone do Paciente:<br><input type="tel" id="telefonePaciente" required></label><br><br>
+    <label>Dentista Solicitante:<br><input type="text" id="dentistaSolicitante" required></label><br><br>
+    <label>CRO:<br><input type="text" id="croDentista" required></label><br><br>
+    <label>Telefone do Dentista:<br><input type="tel" id="telefoneDentista" required></label><br><br>
+    <label>Exame a ser realizado:<br><input type="text" id="exameRealizado" required></label><br><br>
+    <button type="button" onclick="gerarPDF()">Gerar PDF</button>
+  </form>
+
+  <script>
+    async function gerarPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      const nome = document.getElementById('nomePaciente').value;
+      const nascimento = document.getElementById('nascimentoPaciente').value;
+      const telefonePaciente = document.getElementById('telefonePaciente').value;
+      const dentista = document.getElementById('dentistaSolicitante').value;
+      const cro = document.getElementById('croDentista').value;
+      const telefoneDentista = document.getElementById('telefoneDentista').value;
+      const exame = document.getElementById('exameRealizado').value;
+
+      const logo = new Image();
+      logo.src = "Logotipo_CEDROC_PNG - Portable Network Graphics.png";
+      logo.onload = function () {
+        doc.addImage(logo, 'PNG', 10, 10, 40, 40);
+        doc.setFontSize(12);
+        doc.text(`CEDROC - Centro de Radiologia`, 60, 20);
+        doc.text(`Telefone: (65) 98402-5987`, 60, 30);
+        doc.text(`Agendamento de Paciente
