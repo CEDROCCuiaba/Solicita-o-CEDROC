@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Solicitação de Exames CEDROC</title>
+  <meta charset="UTF-8" />
+  <title>Requisição Online CEDROC</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
     body {
@@ -82,39 +82,39 @@
 <body>
   <div class="container">
     <div class="header">
-      <img src="logo_cedroc.png" alt="Logo CEDROC">
-      <h2>CEDROC - Centro de Radiologia</h2>
+      <img src="logo_cedroc.png" alt="Logo CEDROC" />
+      <h2>Requisição Online CEDROC</h2>
       <p>Telefone: (65) 98402-5987</p>
     </div>
 
     <h3>Formulário de Agendamento</h3>
     <form id="agendamentoForm">
       <label>Nome do Paciente:
-        <input type="text" id="nomePaciente" required>
+        <input type="text" id="nomePaciente" required />
       </label>
 
       <label>Data de Nascimento:
-        <input type="date" id="nascimentoPaciente" required>
+        <input type="date" id="nascimentoPaciente" required />
       </label>
 
       <label>Telefone do Paciente:
-        <input type="tel" id="telefonePaciente" required>
+        <input type="tel" id="telefonePaciente" required />
       </label>
 
       <label>Dentista Solicitante:
-        <input type="text" id="dentistaSolicitante" required>
+        <input type="text" id="dentistaSolicitante" required />
       </label>
 
       <label>CRO:
-        <input type="text" id="croDentista" required>
+        <input type="text" id="croDentista" required />
       </label>
 
       <label>Telefone do Dentista:
-        <input type="tel" id="telefoneDentista" required>
+        <input type="tel" id="telefoneDentista" required />
       </label>
 
       <label>Exame a ser realizado:
-        <input type="text" id="exameRealizado" required>
+        <input type="text" id="exameRealizado" required />
       </label>
 
       <label>Motivo da Solicitação:
@@ -152,7 +152,7 @@
 
         doc.setFontSize(14);
         doc.setFont("helvetica", "bold");
-        doc.text("Solicitação de Exames CEDROC", 105, 60, { align: "center" });
+        doc.text("Requisição Online CEDROC", 105, 60, { align: "center" });
 
         doc.setFont("helvetica", "normal");
         doc.setFontSize(12);
@@ -204,20 +204,17 @@
           doc.text("Fale conosco por WhatsApp:", 15, 250);
           doc.addImage(qr, "PNG", 15, 255, 30, 30);
 
-          // Frase ao lado do QR Code
           doc.setFont("helvetica", "bold");
           doc.setFontSize(11);
           const texto = "Nos mande essa requisição por WhatsApp e agende agora mesmo o seu exame.";
           const linhas = doc.splitTextToSize(texto, 110);
           doc.text(linhas, 50, 260);
 
-          // Logo no rodapé (canto direito)
           const rodapeLogo = new Image();
           rodapeLogo.src = "logo_cedroc.png";
           rodapeLogo.onload = function () {
             doc.addImage(rodapeLogo, "PNG", 160, 255, 35, 35);
 
-            // Download compatível com celular
             const pdfBlob = doc.output("blob");
             const blobUrl = URL.createObjectURL(pdfBlob);
             const a = document.createElement('a');
