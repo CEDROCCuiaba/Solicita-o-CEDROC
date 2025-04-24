@@ -7,7 +7,7 @@
 </head>
 <body>
   <div style="text-align:center;">
-    <img src="Logotipo_CEDROC_PNG - Portable Network Graphics.png" alt="Logo CEDROC" width="200">
+    <img src="logo_cedroc.png" alt="Logo CEDROC" width="200">
     <h2>CEDROC - Centro de Radiologia</h2>
     <p>Telefone: (65) 98402-5987</p>
   </div>
@@ -40,10 +40,25 @@
       const exame = document.getElementById('exameRealizado').value;
 
       const logo = new Image();
-      <img src="logo_cedroc.png" alt="Logo CEDROC" width="200">
+      logo.src = "logo_cedroc.png";
       logo.onload = function () {
         doc.addImage(logo, 'PNG', 10, 10, 40, 40);
         doc.setFontSize(12);
         doc.text(`CEDROC - Centro de Radiologia`, 60, 20);
         doc.text(`Telefone: (65) 98402-5987`, 60, 30);
-        doc.text(`Agendamento de Paciente
+        doc.text(`Agendamento de Paciente`, 10, 60);
+
+        doc.text(`Nome: ${nome}`, 10, 70);
+        doc.text(`Nascimento: ${nascimento}`, 10, 80);
+        doc.text(`Telefone: ${telefonePaciente}`, 10, 90);
+        doc.text(`Dentista Solicitante: ${dentista}`, 10, 100);
+        doc.text(`CRO: ${cro}`, 10, 110);
+        doc.text(`Telefone Dentista: ${telefoneDentista}`, 10, 120);
+        doc.text(`Exame a ser realizado: ${exame}`, 10, 130);
+
+        doc.save(`agendamento_${nome.replace(/\s+/g, '_')}.pdf`);
+      };
+    }
+  </script>
+</body>
+</html>
