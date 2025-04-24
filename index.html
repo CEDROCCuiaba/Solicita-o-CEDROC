@@ -217,8 +217,13 @@
           rodapeLogo.onload = function () {
             doc.addImage(rodapeLogo, "PNG", 160, 255, 35, 35);
 
-            const pdfUrl = doc.output("bloburl");
-            window.open(pdfUrl, "_blank");
+            // Download compatível com celular
+            const pdfBlob = doc.output("blob");
+            const blobUrl = URL.createObjectURL(pdfBlob);
+            const a = document.createElement('a');
+            a.href = blobUrl;
+            a.download = `solicitacao_${nome.replace(/\s+/g, '_')}.pdf`;
+            a.click();
           };
         };
       };
