@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Agendamento CEDROC</title>
+  <title>Solicitação de Exames CEDROC</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
     body {
@@ -118,7 +118,7 @@
       </label>
 
       <label>Motivo da Solicitação:
-        <textarea id="motivoSolicitacao" rows="3" placeholder="Descreva brevemente o motivo da solicitação..." required></textarea>
+        <textarea id="motivoSolicitacao" rows="3" required></textarea>
       </label>
 
       <button type="button" onclick="gerarPDF()">Gerar PDF</button>
@@ -128,7 +128,7 @@
   <script>
     async function gerarPDF() {
       const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
+      const doc = new jsPDF({ unit: 'mm', format: 'a4' });
 
       const nome = document.getElementById('nomePaciente').value;
       const nascimento = document.getElementById('nascimentoPaciente').value;
@@ -138,27 +138,89 @@
       const telefoneDentista = document.getElementById('telefoneDentista').value;
       const exame = document.getElementById('exameRealizado').value;
       const motivo = document.getElementById('motivoSolicitacao').value;
+      const dataHora = new Date().toLocaleString('pt-BR');
 
       const logo = new Image();
       logo.src = "logo_cedroc.png";
+
       logo.onload = function () {
-        doc.addImage(logo, 'PNG', 10, 10, 40, 40);
+        doc.setDrawColor(100);
+        doc.setLineWidth(0.5);
+        doc.rect(10, 10, 190, 277);
+
+        doc.addImage(logo, 'PNG', 85, 15, 40, 40);
+
+        doc.setFontSize(14);
+        doc.setFont("helvetica", "bold");
+        doc.text("Solicitação de Exames CEDROC", 105, 60, { align: "center" });
+
+        doc.setFont("helvetica", "normal");
         doc.setFontSize(12);
-        doc.text(`CEDROC - Centro de Radiologia`, 60, 20);
-        doc.text(`Telefone: (65) 98402-5987`, 60, 30);
-        doc.text(`Agendamento de Paciente`, 10, 60);
+        doc.text("Telefone: (65) 98402-5987", 105, 68, { align: "center" });
 
-        doc.text(`Nome: ${nome}`, 10, 70);
-        doc.text(`Nascimento: ${nascimento}`, 10, 80);
-        doc.text(`Telefone: ${telefonePaciente}`, 10, 90);
-        doc.text(`Dentista Solicitante: ${dentista}`, 10, 100);
-        doc.text(`CRO: ${cro}`, 10, 110);
-        doc.text(`Telefone Dentista: ${telefoneDentista}`, 10, 120);
-        doc.text(`Exame a ser realizado: ${exame}`, 10, 130);
-        doc.text(`Motivo: ${motivo}`, 10, 145);
+        doc.setFontSize(10);
+        doc.setTextColor(100);
+        doc.text(`Gerado em: ${dataHora}`, 180, 75, { align: "right" });
+        doc.setTextColor(0);
 
-        const pdfUrl = doc.output('bloburl');
-        window.open(pdfUrl, '_blank');
+        let y = 90;
+        const espaco = 10;
+
+        const dados = [
+          { label: "Agendamento de Paciente", bold: true, skipLine: true },
+          { label: "Nome:", valor: nome },
+          { label: "Nascimento:", valor: nascimento },
+          { label: "Telefone:", valor: telefonePaciente },
+          { label: "Dentista Solicitante:", valor: dentista },
+          { label: "CRO:", valor: cro },
+          { label: "Telefone do Dentista:", valor: telefoneDentista },
+          { label: "Exame a ser realizado:", valor: exame },
+          { label: "Motivo da Solicitação:", valor: motivo }
+        ];
+
+        dados.forEach(item => {
+          if (item.skipLine) {
+            y += 5;
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(13);
+            doc.text(item.label, 15, y);
+            y += espaco;
+          } else {
+            doc.setFont("helvetica", "bold");
+            doc.text(item.label, 15, y);
+            doc.setFont("helvetica", "normal");
+            doc.text(item.valor, 60, y);
+            y += espaco;
+          }
+        });
+
+        // QR Code do WhatsApp
+        const qr = new Image();
+        qr.src = "https://chart.googleapis.com/chart?chs=100x100&cht=qr&chl=https://wa.me/5565984025987";
+
+        qr.onload = function () {
+          doc.setFontSize(10);
+          doc.setFont("helvetica", "normal");
+          doc.text("Fale conosco por WhatsApp:", 15, 250);
+          doc.addImage(qr, "PNG", 15, 255, 30, 30);
+
+          // Frase ao lado do QR Code
+          doc.setFont("helvetica", "bold");
+          doc.setFontSize(11);
+          const texto = "Nos mande essa requisição por WhatsApp e agende agora mesmo o seu exame.";
+          const linhas = doc.splitTextToSize(texto, 110);
+          doc.text(linhas, 50, 260);
+
+          // Logo no rodapé (canto direito)
+          const rodapeLogo = new Image();
+          rodapeLogo.src = "logo_cedroc.png";
+          rodapeLogo.onload = function () {
+            doc.addImage(rodapeLogo, "PNG", 160, 255, 35, 35);
+
+            const pdfUrl = doc.output("bloburl");
+            window.open(pdfUrl, "_blank");
+          };
+        };
       };
     }
   </script>
