@@ -2,29 +2,124 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Agendamento de Paciente - CEDROC</title>
+  <title>Agendamento CEDROC</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 30px auto;
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .header img {
+      width: 120px;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      margin: 0;
+      color: #1c4e80;
+    }
+
+    p {
+      margin: 5px 0;
+      color: #333;
+    }
+
+    h3 {
+      margin-top: 20px;
+      color: #1c4e80;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 5px;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-top: 5px;
+      font-size: 14px;
+    }
+
+    button {
+      margin-top: 25px;
+      padding: 12px 20px;
+      background-color: #1c4e80;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #163e66;
+    }
+  </style>
 </head>
 <body>
-  <div style="text-align:center;">
-    <img src="logo_cedroc.png" alt="Logo CEDROC" width="200">
-    <h2>CEDROC - Centro de Radiologia</h2>
-    <p>Telefone: (65) 98402-5987</p>
+  <div class="container">
+    <div class="header">
+      <img src="logo_cedroc.pngd" alt="Logo CEDROC">
+      <h2>CEDROC - Centro de Radiologia</h2>
+      <p>Telefone: (65) 98402-5987</p>
+    </div>
+
+    <h3>Formulário de Agendamento</h3>
+    <form id="agendamentoForm">
+      <label>Nome do Paciente:
+        <input type="text" id="nomePaciente" required>
+      </label>
+
+      <label>Data de Nascimento:
+        <input type="date" id="nascimentoPaciente" required>
+      </label>
+
+      <label>Telefone do Paciente:
+        <input type="tel" id="telefonePaciente" required>
+      </label>
+
+      <label>Dentista Solicitante:
+        <input type="text" id="dentistaSolicitante" required>
+      </label>
+
+      <label>CRO:
+        <input type="text" id="croDentista" required>
+      </label>
+
+      <label>Telefone do Dentista:
+        <input type="tel" id="telefoneDentista" required>
+      </label>
+
+      <label>Exame a ser realizado:
+        <input type="text" id="exameRealizado" required>
+      </label>
+
+      <button type="button" onclick="gerarPDF()">Gerar PDF</button>
+    </form>
   </div>
-
-  <hr>
-
-  <h3>Formulário de Agendamento</h3>
-  <form id="agendamentoForm">
-    <label>Nome do Paciente:<br><input type="text" id="nomePaciente" required></label><br><br>
-    <label>Data de Nascimento:<br><input type="date" id="nascimentoPaciente" required></label><br><br>
-    <label>Telefone do Paciente:<br><input type="tel" id="telefonePaciente" required></label><br><br>
-    <label>Dentista Solicitante:<br><input type="text" id="dentistaSolicitante" required></label><br><br>
-    <label>CRO:<br><input type="text" id="croDentista" required></label><br><br>
-    <label>Telefone do Dentista:<br><input type="tel" id="telefoneDentista" required></label><br><br>
-    <label>Exame a ser realizado:<br><input type="text" id="exameRealizado" required></label><br><br>
-    <button type="button" onclick="gerarPDF()">Gerar PDF</button>
-  </form>
 
   <script>
     async function gerarPDF() {
@@ -40,7 +135,7 @@
       const exame = document.getElementById('exameRealizado').value;
 
       const logo = new Image();
-      logo.src = "logo_cedroc.pngd";
+      logo.src = "logo_cedroc.png";
       logo.onload = function () {
         doc.addImage(logo, 'PNG', 10, 10, 40, 40);
         doc.setFontSize(12);
