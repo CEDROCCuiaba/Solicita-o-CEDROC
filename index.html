@@ -7,15 +7,15 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f9f9f9;
+      background-color: #f2f2f2;
       margin: 0;
       padding: 0;
     }
 
     .container {
       max-width: 600px;
-      margin: 30px auto;
-      background-color: #fff;
+      margin: 40px auto;
+      background-color: #ffffff;
       padding: 30px;
       border-radius: 12px;
       box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
@@ -27,22 +27,21 @@
     }
 
     .header img {
-      width: 120px;
+      width: 100px;
       margin-bottom: 10px;
     }
 
     h2 {
-      margin: 0;
       color: #1c4e80;
+      margin: 5px 0;
     }
 
     p {
-      margin: 5px 0;
-      color: #333;
+      color: #444;
+      font-size: 14px;
     }
 
     h3 {
-      margin-top: 20px;
       color: #1c4e80;
       border-bottom: 1px solid #ccc;
       padding-bottom: 5px;
@@ -54,13 +53,14 @@
       font-weight: bold;
     }
 
-    input {
+    input, textarea {
       width: 100%;
       padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
       margin-top: 5px;
       font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      resize: vertical;
     }
 
     button {
@@ -82,7 +82,7 @@
 <body>
   <div class="container">
     <div class="header">
-      <img src="logo_cedroc.pngd" alt="Logo CEDROC">
+      <img src="logo_cedroc.png" alt="Logo CEDROC">
       <h2>CEDROC - Centro de Radiologia</h2>
       <p>Telefone: (65) 98402-5987</p>
     </div>
@@ -117,6 +117,10 @@
         <input type="text" id="exameRealizado" required>
       </label>
 
+      <label>Motivo da Solicitação:
+        <textarea id="motivoSolicitacao" rows="3" placeholder="Descreva brevemente o motivo da solicitação..." required></textarea>
+      </label>
+
       <button type="button" onclick="gerarPDF()">Gerar PDF</button>
     </form>
   </div>
@@ -133,6 +137,7 @@
       const cro = document.getElementById('croDentista').value;
       const telefoneDentista = document.getElementById('telefoneDentista').value;
       const exame = document.getElementById('exameRealizado').value;
+      const motivo = document.getElementById('motivoSolicitacao').value;
 
       const logo = new Image();
       logo.src = "logo_cedroc.png";
@@ -150,8 +155,10 @@
         doc.text(`CRO: ${cro}`, 10, 110);
         doc.text(`Telefone Dentista: ${telefoneDentista}`, 10, 120);
         doc.text(`Exame a ser realizado: ${exame}`, 10, 130);
+        doc.text(`Motivo: ${motivo}`, 10, 145);
 
-        doc.save(`agendamento_${nome.replace(/\s+/g, '_')}.pdf`);
+        const pdfUrl = doc.output('bloburl');
+        window.open(pdfUrl, '_blank');
       };
     }
   </script>
