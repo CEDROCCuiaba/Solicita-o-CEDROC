@@ -1,70 +1,66 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
   <title>Requisição Online CEDROC</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
+      background-color: #f8f9fa;
       margin: 0;
-      padding: 0;
+      padding: 20px;
     }
-
     .container {
-      max-width: 500px;
-      margin: 40px auto;
-      background-color: white;
+      max-width: 600px;
+      margin: auto;
+      background: white;
       padding: 30px;
       border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
-
     .header {
       text-align: center;
       margin-bottom: 20px;
     }
-
     .header img {
-      width: 100px;
+      max-width: 100px;
+      margin-bottom: 10px;
     }
-
-    .header h2 {
-      color: #004080;
-      margin-bottom: 5px;
+    h2 {
+      margin: 0;
+      font-size: 20px;
+      color: #004A98;
     }
-
-    form label {
+    p {
+      margin: 5px 0 20px;
+      font-size: 14px;
+      color: #555;
+    }
+    label {
       display: block;
       margin-top: 15px;
       font-weight: bold;
     }
-
-    form input, form textarea {
+    input, textarea {
       width: 100%;
-      padding: 8px;
-      margin-top: 5px;
-      border: 1px solid #ccc;
+      padding: 10px;
+      border: 1px solid #ddd;
       border-radius: 5px;
+      margin-top: 5px;
       font-size: 14px;
     }
-
-    #btn {
+    button {
       margin-top: 20px;
-      padding: 10px;
-      background-color: #004080;
+      background-color: #004A98;
       color: white;
+      padding: 10px 20px;
       border: none;
-      width: 100%;
       border-radius: 5px;
-      font-size: 16px;
       cursor: pointer;
     }
-
-    #btn:hover {
-      background-color: #002c5c;
+    button:hover {
+      background-color: #003a78;
     }
   </style>
 </head>
@@ -79,30 +75,30 @@
     <h3>Formulário de Agendamento</h3>
     <form id="agendamentoForm">
       <label>Nome do Paciente:</label>
-      <input id="nomePaciente" required />
+      <input type="text" id="nomePaciente" required>
 
       <label>Data de Nascimento:</label>
-      <input id="nascimentoPaciente" type="date" required />
+      <input type="date" id="nascimentoPaciente" required>
 
       <label>Telefone do Paciente:</label>
-      <input id="telefonePaciente" type="tel" required />
+      <input type="text" id="telefonePaciente" required>
 
       <label>Dentista Solicitante:</label>
-      <input id="dentistaSolicitante" required />
+      <input type="text" id="dentistaSolicitante" required>
 
       <label>CRO:</label>
-      <input id="croDentista" required />
+      <input type="text" id="croDentista" required>
 
       <label>Telefone do Dentista:</label>
-      <input id="telefoneDentista" type="tel" required />
+      <input type="text" id="telefoneDentista" required>
 
       <label>Exame a ser realizado:</label>
-      <input id="exameRealizado" required />
+      <input type="text" id="exameRealizado" required>
 
       <label>Motivo da Solicitação:</label>
-      <textarea id="motivoSolicitacao" rows="3"></textarea>
+      <textarea id="motivoSolicitacao" rows="3" required></textarea>
 
-      <button type="button" id="btn" onclick="gerarPDF()">Gerar PDF</button>
+      <button type="button" onclick="gerarPDF()">Gerar PDF</button>
     </form>
   </div>
 
@@ -111,52 +107,68 @@
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
 
-      const nome = document.getElementById("nomePaciente").value;
-      const nascimento = document.getElementById("nascimentoPaciente").value;
-      const telefonePaciente = document.getElementById("telefonePaciente").value;
-      const dentista = document.getElementById("dentistaSolicitante").value;
-      const cro = document.getElementById("croDentista").value;
-      const telefoneDentista = document.getElementById("telefoneDentista").value;
-      const exame = document.getElementById("exameRealizado").value;
-      const motivo = document.getElementById("motivoSolicitacao").value;
+      const logo = new Image();
+      logo.src = "logo_cedroc.png";
 
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(14);
-      doc.text("Solicitação de Exames CEDROC", 105, 20, { align: "center" });
-
-      doc.setFontSize(10);
-      doc.setFont("helvetica", "normal");
-      let y = 30;
-
-      const linhas = [
-        `Nome: ${nome}`,
-        `Nascimento: ${nascimento}`,
-        `Telefone do Paciente: ${telefonePaciente}`,
-        `Dentista Solicitante: ${dentista}`,
-        `CRO: ${cro}`,
-        `Telefone do Dentista: ${telefoneDentista}`,
-        `Exame a ser realizado: ${exame}`,
-        `Motivo da Solicitação: ${motivo}`
-      ];
-
-      linhas.forEach((linha, i) => {
-        doc.text(linha, 20, y + (i * 10));
-      });
-
-      // Rodapé com QR Code do WhatsApp
-      const qr = new Image();
-      qr.src = "https://chart.googleapis.com/chart?chs=100x100&cht=qr&chl=https://wa.me/5565984025987";
-      qr.onload = function () {
-        doc.addImage(qr, "PNG", 20, 120, 40, 40);
+      logo.onload = function () {
+        doc.addImage(logo, "PNG", 15, 10, 30, 30);
         doc.setFont("helvetica", "bold");
-        doc.setFontSize(10);
-        doc.text("Nos mande essa requisição por WhatsApp e agende agora mesmo o seu exame.", 70, 130, { maxWidth: 120 });
+        doc.setFontSize(16);
+        doc.text("Solicitação de Exames CEDROC", 105, 25, { align: "center" });
 
-        doc.save("requisicao_cedroc.pdf");
+        doc.setFontSize(12);
+        doc.setFont("helvetica", "normal");
+
+        const nome = document.getElementById("nomePaciente").value;
+        const nascimento = document.getElementById("nascimentoPaciente").value;
+        const telefonePaciente = document.getElementById("telefonePaciente").value;
+        const dentista = document.getElementById("dentistaSolicitante").value;
+        const cro = document.getElementById("croDentista").value;
+        const telefoneDentista = document.getElementById("telefoneDentista").value;
+        const exame = document.getElementById("exameRealizado").value;
+        const motivo = document.getElementById("motivoSolicitacao").value;
+
+        const linhas = [
+          `Nome: ${nome}`,
+          `Nascimento: ${nascimento}`,
+          `Telefone do Paciente: ${telefonePaciente}`,
+          `Dentista Solicitante: ${dentista}`,
+          `CRO: ${cro}`,
+          `Telefone do Dentista: ${telefoneDentista}`,
+          `Exame a ser realizado: ${exame}`,
+          `Motivo da Solicitação: ${motivo}`
+        ];
+
+        let y = 50;
+        linhas.forEach(l => {
+          doc.text(l, 20, y);
+          y += 10;
+        });
+
+        // Adicionar QR Code
+        const qr = new Image();
+        qr.src = "https://chart.googleapis.com/chart?chs=100x100&cht=qr&chl=https://wa.me/5565984025987";
+
+        qr.onload = function () {
+          doc.addImage(qr, "PNG", 20, y + 10, 30, 30);
+          doc.setFont("helvetica", "bold");
+          doc.setFontSize(10);
+          doc.text("Nos mande essa requisição por WhatsApp", 55, y + 20);
+          doc.text("e agende agora mesmo o seu exame.", 55, y + 28);
+
+          // Logo no rodapé
+          doc.addImage(logo, "PNG", 165, 280, 30, 15);
+
+          doc.save("requisicao_cedroc.pdf");
+        };
+
+        qr.onerror = function () {
+          doc.save("requisicao_cedroc.pdf");
+        };
       };
 
-      qr.onerror = function () {
-        doc.save("requisicao_cedroc.pdf"); // Gera mesmo sem o QR
+      logo.onerror = function () {
+        alert("Erro ao carregar a logo. Verifique se 'logo_cedroc.png' está no diretório.");
       };
     }
   </script>
