@@ -8,142 +8,98 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f8f9fa;
-      display: flex;
-      justify-content: center;
+      background-color: #f4f4f4;
       padding: 20px;
     }
 
     .container {
-      background: white;
+      max-width: 600px;
+      margin: auto;
+      background: #fff;
       padding: 30px;
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      width: 100%;
-      max-width: 500px;
     }
 
-    .logo {
+    .header {
       text-align: center;
-      margin-bottom: 15px;
     }
 
-    .logo img {
-      width: 120px;
+    .header img {
+      width: 100px;
     }
 
     h2 {
-      text-align: center;
-      color: #005691;
-      margin: 10px 0 5px;
-    }
-
-    p.telefone {
-      text-align: center;
-      margin-top: 0;
-      font-size: 0.9em;
-      color: #333;
-    }
-
-    h3 {
-      border-bottom: 1px solid #ccc;
-      padding-bottom: 5px;
-      margin-top: 20px;
-      color: #005691;
+      margin: 10px 0;
+      color: #004A98;
     }
 
     label {
       display: block;
-      margin: 12px 0 5px;
+      margin-top: 15px;
       font-weight: bold;
     }
 
     input, textarea {
       width: 100%;
-      padding: 8px;
-      border-radius: 5px;
+      padding: 10px;
+      margin-top: 5px;
       border: 1px solid #ccc;
+      border-radius: 6px;
     }
 
-    button, a.whatsapp {
-      margin-top: 15px;
-      display: inline-block;
-      background-color: #25D366;
+    button {
+      margin-top: 20px;
+      width: 100%;
+      background-color: #004A98;
       color: white;
-      padding: 10px 20px;
       border: none;
-      border-radius: 5px;
-      text-decoration: none;
-      font-weight: bold;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 6px;
       cursor: pointer;
     }
 
-    .footer-logo {
-      margin-top: 30px;
-      text-align: center;
-    }
-
-    .footer-logo img {
-      width: 100px;
-    }
-
-    .whatsapp {
-      background-color: #25D366;
-      text-align: center;
-    }
-
-    .qr-text {
-      font-weight: bold;
-      margin-top: 10px;
-      text-align: center;
+    button:hover {
+      background-color: #003871;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="logo">
+    <div class="header">
       <img src="logo_cedroc.png" alt="Logo CEDROC" />
+      <h2>Requisição Online CEDROC</h2>
+      <p>Telefone: (65) 98402-5987</p>
     </div>
-    <h2>CEDROC - Centro de Radiologia</h2>
-    <p class="telefone">Telefone: (65) 98402-5987</p>
 
-    <h3>Formulário de Agendamento</h3>
-    <form id="agendamentoForm">
+    <form>
       <label>Nome do Paciente:</label>
-      <input type="text" id="nome" required />
+      <input type="text" id="nome" required>
 
       <label>Data de Nascimento:</label>
-      <input type="date" id="nascimento" required />
+      <input type="date" id="nascimento" required>
 
       <label>Telefone do Paciente:</label>
-      <input type="tel" id="telefonePaciente" required />
+      <input type="tel" id="telefonePaciente" required>
 
       <label>Dentista Solicitante:</label>
-      <input type="text" id="dentista" required />
+      <input type="text" id="dentista" required>
 
       <label>CRO:</label>
-      <input type="text" id="cro" required />
+      <input type="text" id="cro" required>
 
       <label>Telefone do Dentista:</label>
-      <input type="tel" id="telefoneDentista" required />
+      <input type="tel" id="telefoneDentista" required>
 
       <label>Exame a ser realizado:</label>
-      <input type="text" id="exame" required />
+      <input type="text" id="exame" required>
 
       <label>Motivo da Solicitação:</label>
       <textarea id="motivo" rows="3" required></textarea>
 
       <button type="button" onclick="gerarPDF()">Gerar PDF</button>
-      <a
-        class="whatsapp"
-        href="https://wa.me/5565984025987?text=Olá,%20estou%20enviando%20a%20requisição%20para%20agendamento%20de%20exame%20no%20CEDROC."
-        target="_blank"
-      >📲 Compartilhar no WhatsApp</a>
     </form>
-
-    <div class="footer-logo">
-      <img src="logo_cedroc.png" alt="Logo CEDROC" />
-    </div>
   </div>
 
   <script>
@@ -151,61 +107,74 @@
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
 
-      const nome = document.getElementById('nome').value;
-      const nascimento = document.getElementById('nascimento').value;
-      const telefonePaciente = document.getElementById('telefonePaciente').value;
-      const dentista = document.getElementById('dentista').value;
-      const cro = document.getElementById('cro').value;
-      const telefoneDentista = document.getElementById('telefoneDentista').value;
-      const exame = document.getElementById('exame').value;
-      const motivo = document.getElementById('motivo').value;
+      // Capturar dados
+      const nome = document.getElementById("nome").value;
+      const nascimento = document.getElementById("nascimento").value;
+      const telefonePaciente = document.getElementById("telefonePaciente").value;
+      const dentista = document.getElementById("dentista").value;
+      const cro = document.getElementById("cro").value;
+      const telefoneDentista = document.getElementById("telefoneDentista").value;
+      const exame = document.getElementById("exame").value;
+      const motivo = document.getElementById("motivo").value;
 
-      // Logo CEDROC
-      const logoImg = await loadImageBase64('logo_cedroc.png');
+      // Adicionar título e logo
+      try {
+        const logo = await loadImage("logo_cedroc.png");
+        doc.addImage(logo, 'PNG', 15, 10, 30, 30);
+      } catch (e) {
+        console.warn("Logo não carregada.");
+      }
 
-      doc.addImage(logoImg, 'PNG', 15, 10, 30, 30);
-      doc.setFontSize(14);
-      doc.text('CEDROC - Centro de Radiologia', 50, 20);
-      doc.setFontSize(11);
-      doc.text('Telefone: (65) 98402-5987', 50, 27);
-
+      doc.setFont("helvetica", "bold");
       doc.setFontSize(16);
-      doc.setFont(undefined, 'bold');
-      doc.text('Solicitação de Exames CEDROC', 60, 50, { align: "center" });
+      doc.text("Solicitação de Exames CEDROC", 105, 25, { align: "center" });
 
       doc.setFontSize(12);
-      doc.setFont(undefined, 'normal');
-      let y = 65;
+      doc.setFont("helvetica", "normal");
 
-      doc.text(`Nome: ${nome}`, 20, y);
-      y += 10;
-      doc.text(`Nascimento: ${nascimento}`, 20, y);
-      y += 10;
-      doc.text(`Telefone do Paciente: ${telefonePaciente}`, 20, y);
-      y += 10;
-      doc.text(`Dentista Solicitante: ${dentista}`, 20, y);
-      y += 10;
-      doc.text(`CRO: ${cro}`, 20, y);
-      y += 10;
-      doc.text(`Telefone do Dentista: ${telefoneDentista}`, 20, y);
-      y += 10;
-      doc.text(`Exame a ser realizado: ${exame}`, 20, y);
-      y += 10;
-      doc.text(`Motivo da Solicitação: ${motivo}`, 20, y);
+      let y = 40;
+      const linhas = [
+        `Nome do Paciente: ${nome}`,
+        `Data de Nascimento: ${nascimento}`,
+        `Telefone do Paciente: ${telefonePaciente}`,
+        `Dentista Solicitante: ${dentista}`,
+        `CRO: ${cro}`,
+        `Telefone do Dentista: ${telefoneDentista}`,
+        `Exame a ser realizado: ${exame}`,
+        `Motivo da Solicitação: ${motivo}`
+      ];
 
-      // QR Code WhatsApp
-      const qrCode = await loadImageBase64('qr_cedroc.png');
-      doc.addImage(qrCode, 'PNG', 145, 240, 40, 40);
-      doc.setFont(undefined, 'bold');
-      doc.text('Nos mande esse requisição por WhatsApp e agende agora mesmo o seu exame.', 20, 285);
+      linhas.forEach(l => {
+        doc.text(l, 20, y);
+        y += 10;
+      });
 
-      doc.save('solicitacao_cedroc.pdf');
+      // Link clicável para WhatsApp
+      doc.setTextColor(0, 102, 0);
+      doc.setFontSize(11);
+      doc.textWithLink(
+        "📲 Clique aqui para enviar esta requisição por WhatsApp",
+        20,
+        y + 10,
+        { url: "https://wa.me/5565984025987" }
+      );
+      doc.setTextColor(0);
+
+      // QR Code
+      try {
+        const qr = await loadImage("https://chart.googleapis.com/chart?chs=100x100&cht=qr&chl=https://wa.me/5565984025987");
+        doc.addImage(qr, "PNG", 20, y + 20, 30, 30);
+      } catch (e) {
+        console.warn("QR Code não carregado.");
+      }
+
+      doc.save("requisicao_cedroc.pdf");
     }
 
-    async function loadImageBase64(url) {
-      const response = await fetch(url);
-      const blob = await response.blob();
-      return await new Promise((resolve) => {
+    async function loadImage(url) {
+      const res = await fetch(url);
+      const blob = await res.blob();
+      return new Promise(resolve => {
         const reader = new FileReader();
         reader.onloadend = () => resolve(reader.result);
         reader.readAsDataURL(blob);
